@@ -17,7 +17,7 @@
 
 #include <Wire.h>
 
-#include "SparkFun_AK9750_Arduino_Library.h"
+#include "SparkFun_AK9750_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK9750_Arduino_Library
 
 AK9750 movementSensor; //Hook object to the library
 
