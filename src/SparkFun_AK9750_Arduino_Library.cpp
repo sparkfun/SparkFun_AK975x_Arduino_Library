@@ -40,9 +40,9 @@ boolean AK9750::begin(TwoWire &wirePort, uint32_t i2cSpeed, uint8_t i2caddr)
   if (deviceID != 0x13) //Device ID should be 0x13
     return (false);
 
-  setMode(MODE_0); //Set to continuous read
+  setMode(AK9750_MODE_0); //Set to continuous read
 
-  setCutoffFrequency(FREQ_8_8HZ); //Set output to fastest, with least filtering
+  setCutoffFrequency(AK9750_FREQ_8_8HZ); //Set output to fastest, with least filtering
 
   refresh(); //Read dummy register after new data is read
 
@@ -96,8 +96,8 @@ float AK9750::getTemperatureF()
 //Set the mode. Continuous mode 0 is favored
 void AK9750::setMode(uint8_t mode)
 {
-  if (mode > MODE_3) mode = MODE_0; //Default to mode 0
-  if (mode == 0b011) mode = MODE_0; //0x03 is prohibited
+  if (mode > AK9750_MODE_3) mode = AK9750_MODE_0; //Default to mode 0
+  if (mode == 0b011) mode = AK9750_MODE_0; //0x03 is prohibited
 
   //Read, mask set, write
   byte currentSettings = readRegister(AK9750_ECNTL1);
