@@ -1,11 +1,9 @@
 SparkFun AK9750 Quad PIR Human Presence Sensor Library
 ===========================================================
 
-![SparkFun Reflectance, Particle, and Pulse Ox sensor - MAX30105](https://cdn.sparkfun.com/assets/parts/1/1/8/7/4/14045-02.jpg)
+![SparkFun Human Presence Sensor - AK9750](https://cdn.sparkfun.com//assets/parts/1/2/2/4/8/Qwiic-AK9750-3.jpg)
 
-[*SparkFun Reflectance, Particle, and Pulse Ox sensor - MAX30105 (SEN-14045)*](https://www.sparkfun.com/products/14045)
-
-![A graph of a heartbeat](https://raw.githubusercontent.com/sparkfun/SparkFun_MAX3010x_Sensor_Library/master/extras/HeartBeat1.jpg)  
+[*SparkX Qwiic Human Presence Sensor - AK9750(SPX-14289)*](https://www.sparkfun.com/products/14289)
 
 The Qwiic Human Presence Sensor uses the AK9750 digital PIR. This sensor uses four sensors with overlapping fields of view in order to detect both human presence and the associated movement of that heat source.
 
