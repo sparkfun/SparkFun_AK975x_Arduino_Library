@@ -8,7 +8,7 @@
   This code attempts to calculate derivatives on a single IR channel to see if something has entered
   or exited the view of the sensor. 
 
-  Open the Serial plotter at 115200 to see the output. Requires Arduino v1.8.1 or above.
+  Open the Serial plotter at 9600 to see the output. Requires Arduino v1.8.1 or above.
   
   There are probably better mathematical approaches to filtering and detecting motion events. This is
   just an example of how you might approach it.
@@ -19,15 +19,15 @@
   Hardware Connections:
   Attach a Qwiic shield to your RedBoard or Uno.
   Plug the Qwiic sensor into any port.
-  Serial.print or plotter at 115200bps
+  Serial.print or plotter at 9600bps
 
 */
 
 #include <Wire.h>
 
-#include "SparkFun_AK9750_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK9750_Arduino_Library
+#include "SparkFun_AK975X_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975X_Arduino_Library
 
-AK9750 movementSensor; //Hook object to the library
+AK975X movementSensor; //Hook object to the library
 
 unsigned int upValue; // current proximity reading
 unsigned int averageValue;   // low-pass filtered proximity reading
@@ -45,7 +45,7 @@ signed int sensitivity = 50;  // Sensitivity of touch/release detection, values 
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   Wire.begin();
 
@@ -60,8 +60,6 @@ void setup()
   averageValue = upValue;
   fa2 = 0;
   movementSensor.refresh(); //Read dummy register after new data is read
-
-  Serial.println("AK9750 Human Presence Sensor online");
 }
 
 void loop()

@@ -1,5 +1,5 @@
 /*
-  AK9752 Human Presence and Movement Sensor Example Code
+  AK975X Human Presence and Movement Sensor Example Code
   By: Nathan Seidle
   SparkFun Electronics
   Date: March 10th, 2017
@@ -31,16 +31,17 @@
 
 #include <Wire.h>
 
-#include "SparkFun_AK9750_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK9750_Arduino_Library
+#include "SparkFun_AK975X_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975X_Arduino_Library
 
-AK9750 movementSensor; //Hook object to the library
+AK975X movementSensor; //Hook object to the library
 
 int ir1, ir2, ir3, ir4, temperature;
 
 void setup()
-{
-  Serial.begin(9600);
-  Serial.println("AK9750 Read Example");
+{ 
+  long baud = 115200;
+  Serial.begin(baud);
+  Serial.println("AK975X Read Example");
 
   Wire.begin();
 
@@ -48,7 +49,7 @@ void setup()
   //Here we can pass it different Wire streams such as Wire1 or Wire2 used on Teensys
   //We can select FAST or STANDARD I2C speed
   //If you set the address jumpers, this is where you pass the address of the sensor you want to talk to
-  if (movementSensor.begin(Wire, I2C_SPEED_FAST, 0x64) == false)
+  if (movementSensor.begin(Wire, I2C_SPEED_FAST, 0x64, baud) == false)
   {
     Serial.println("Device not found. Check wiring.");
     while (1);
@@ -57,21 +58,12 @@ void setup()
   movementSensor.enableDebugging(); //Print extra debug messages if needed. Defaults to Serial.
   //movementSensor.enableDebugging(SerialUSB); //Use can pass other serial ports if desired.
   //There is also a disableDebugging();
-
-  Serial.println("AK9750 Human Presence Sensor online");
 }
 
 void loop()
 {
   if (movementSensor.available())
-  {
-    if(movementSensor.overrun() == true)
-    {
-      //At 9600bps printing takes longer than the IC can read. Increase serial to 115200bps to increase
-      //read rate fast enough.
-      Serial.println("Data overrun!");
-    }
-    
+  {    
     ir1 = movementSensor.getIR1();
     ir2 = movementSensor.getIR2();
     ir3 = movementSensor.getIR3();
@@ -97,6 +89,11 @@ void loop()
     Serial.print("]");
     Serial.println();
   }
-
-  //delay(1);
+  if(movementSensor.overrun() == true)
+    {
+      //At 9600bps printing takes longer than the IC can read. Increase serial to 115200bps to increase
+      //read rate fast enough.
+      Serial.println("Data overrun!");
+    }
+  delay(1);
 }
