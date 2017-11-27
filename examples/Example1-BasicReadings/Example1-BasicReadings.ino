@@ -17,16 +17,16 @@
 
 #include <Wire.h>
 
-#include "SparkFun_AK9750_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK9750_Arduino_Library
+#include "SparkFun_AK975X_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975X_Arduino_Library
 
-AK9750 movementSensor; //Hook object to the library
+AK975X movementSensor; //Hook object to the library
 
 int ir1, ir2, ir3, ir4, temperature;
 
 void setup()
 {
   Serial.begin(9600);
-  Serial.println("AK9750 Read Example");
+  Serial.println("AK975X Read Example");
 
   Wire.begin();
 
@@ -36,8 +36,6 @@ void setup()
     Serial.println("Device not found. Check wiring.");
     while (1);
   }
-
-  Serial.println("AK9750 Human Presence Sensor online");
 }
 
 void loop()
@@ -69,6 +67,5 @@ void loop()
     Serial.print("]");
     Serial.println();
   }
-
   delay(1);
 }
