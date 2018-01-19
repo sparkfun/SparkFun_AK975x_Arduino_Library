@@ -1,11 +1,11 @@
-SparkFun AK9750 Quad PIR Human Presence Sensor Library
+SparkFun AK975x Quad PIR Human Presence Sensor Arduino Library
 ===========================================================
 
 ![SparkFun Human Presence Sensor Breakout - AK9753 (Qwiic)](https://cdn.sparkfun.com//assets/parts/1/2/3/3/1/14349-01.jpg)
 
 [*SparkFun Human Presence Sensor Breakout - AK9753 (Qwiic) (SEN-14349)*](https://www.sparkfun.com/products/14349)
 
-The Qwiic Human Presence Sensor uses the AK9750 digital PIR. This sensor uses four sensors with overlapping fields of view in order to detect both human presence and the associated movement of that heat source.
+The Qwiic Human Presence Sensor uses the AK975x digital PIR. This sensor uses four sensors with overlapping fields of view in order to detect both human presence and the associated movement of that heat source.
 
 Library written by Nathan Seidle ([SparkFun](http://www.sparkfun.com)).
 
