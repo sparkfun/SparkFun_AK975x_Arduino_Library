@@ -53,10 +53,14 @@
 #define AK9750_IR4 0x0C
 #define AK9750_TMP 0x0E
 #define AK9750_ST2 0x10 //Dummy register
-#define AK9750_ETH13H 0x11
-#define AK9750_ETH13L 0x13
-#define AK9750_ETH24H 0x15
-#define AK9750_ETH24L 0x17
+#define AK9750_ETH13H_LOW 0x11
+#define AK9750_ETH13H_HIGH 0x12
+#define AK9750_ETH13L_LOW 0x13
+#define AK9750_ETH13L_HIGH 0x14
+#define AK9750_ETH24H_LOW 0x15
+#define AK9750_ETH24H_HIGH 0x16
+#define AK9750_ETH24L_LOW 0x17
+#define AK9750_ETH24L_HIGH 0x18
 #define AK9750_EHYS13 0x19
 #define AK9750_EHYS24 0x1A
 #define AK9750_EINTEN 0x1B
@@ -92,6 +96,7 @@
 #define AK9750_EETH24L_HIGH 0X58
 #define AK9750_EEHYS13 0X59
 #define AK9750_EEHYS24 0X5A
+#define AK9750_EEINTEN 0X5B
 
 //EEPROM functions
 #define EEPROM_MODE 0b11000001
@@ -102,7 +107,8 @@ class AK9750 {
   public:
     //By default use Wire, standard I2C speed, and the defaul AK9750 address
     boolean begin(TwoWire &wirePort = Wire, uint32_t i2cSpeed = I2C_SPEED_STANDARD, uint8_t i2caddr = AK9750_DEFAULT_ADDRESS);
-
+    boolean reboot();
+    
     int16_t getIR1(); //Get the IR values for various sensors
     int16_t getIR2(); //It's a low or negative number that increases
     int16_t getIR3(); //as heat/humans are detected
@@ -122,6 +128,14 @@ class AK9750 {
     void setHysteresisIr1Ir3(int v); // Set Hysteresis value to EEPROM EHYS24
     void readHysteresis();
     void readThreshold();
+
+    void setThresholdEepromIr2Ir4(bool grade, int v); //Set high or low threshold  for Ir2-Ir4
+    void setHysteresisEepromIr2Ir4(int v); // Set Hysteresis value to EEPROM EHYS24
+    void setThresholdEepromIr1Ir3(bool grade, int v); //Set high or low threshold  for Ir1-Ir3
+    void setHysteresisEepromIr1Ir3(int v); // Set Hysteresis value to EEPROM EHYS24
+    void readHysteresisEeprom();
+    void readThresholdEeprom();
+
     void setInterrupts(bool ir13h, bool ir13l, bool ir24h, bool ir24l, bool dr); // activate or inactivate corresponding interrupts
     int readInterruptStatus(); // read wich interrupt as been triggered
 

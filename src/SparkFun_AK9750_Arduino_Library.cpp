@@ -49,6 +49,18 @@ boolean AK9750::begin(TwoWire &wirePort, uint32_t i2cSpeed, uint8_t i2caddr)
   return (true); //Success!
 }
 
+boolean AK9750::reboot()
+{
+
+  setMode(AK9750_MODE_0); //Set to continuous read
+
+  setCutoffFrequency(AK9750_FREQ_8_8HZ); //Set output to fastest, with least filtering
+
+  refresh(); //Read dummy register after new data is read
+
+  return (true); //Success!
+}
+
 //Returns the decimal value of sensor channel
 int16_t AK9750::getIR1()
 {
@@ -120,7 +132,43 @@ void AK9750::setCutoffFrequency(uint8_t frequency)
   writeRegister(AK9750_ECNTL1, currentSettings); //Write
 }
 
-void AK9750::setThresholdIr2Ir4(bool grade, int v) {
+void AK9750::setThresholdIr2Ir4(bool weight, int v) {
+
+  int k=v >>5; //high bits [11;5]
+  int b=v <<3; // low bits
+  b &= 0b11111000; // low bits
+  k &= 0b01111111; // high bits
+  byte currentSettings;
+
+  if (weight) {
+
+    writeRegister(AK9750_ETH24H_LOW, b);
+    writeRegister(AK9750_ETH24H_HIGH, k);
+
+    currentSettings=readRegister(AK9750_ETH24H_LOW);
+    //Serial.print("AK9750_ETH24H_LOW : ");
+    //Serial.println(currentSettings,BIN);
+
+    currentSettings=readRegister(AK9750_ETH24H_HIGH);
+    //Serial.print("AK9750_ETH24H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
+
+  } else {
+
+    writeRegister(AK9750_ETH24L_LOW, b);
+    writeRegister(AK9750_ETH24L_HIGH, k);
+
+    currentSettings=readRegister(AK9750_ETH24L_LOW);
+    //Serial.print("AK9750_ETH24L_LOW : ");
+    //Serial.println(currentSettings,BIN);
+
+    currentSettings=readRegister(AK9750_ETH24L_HIGH);
+    //Serial.print("AK9750_ETH24L_HIGH : ");
+    //Serial.println(currentSettings,BIN);
+  }
+}
+
+void AK9750::setThresholdEepromIr2Ir4(bool weight, int v) {
 
   int h=v >>6; //high bits [11;6]
   v &= 0b00111111; // low bits
@@ -134,7 +182,7 @@ void AK9750::setThresholdIr2Ir4(bool grade, int v) {
 
   writeRegister(AK9750_ECNTL1, temp); // open EEPROM mode  
 
-  if (grade) {
+  if (weight) {
 
     writeRegister(AK9750_EKEY, EKEY_ON); // allow EEPROM writing
 
@@ -149,12 +197,12 @@ void AK9750::setThresholdIr2Ir4(bool grade, int v) {
     delay(15); //  EEPROM write time (tWR) should be longer than 10ms
 
     currentSettings=readRegister(AK9750_EETH24H_LOW);
-    Serial.print("AK9750_EETH24H_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24H_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH24H_HIGH);
-    Serial.print("AK9750_EETH24H_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
   } else {
 
@@ -171,20 +219,55 @@ void AK9750::setThresholdIr2Ir4(bool grade, int v) {
     delay(15); //  EEPROM write time (tWR) should be longer than 10ms
 
     currentSettings=readRegister(AK9750_EETH24L_LOW);
-    Serial.print("AK9750_EETH24L_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24L_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH24L_HIGH);
-    Serial.print("AK9750_EETH24L_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24L_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
   }
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
-
-
 }
-void AK9750::setThresholdIr1Ir3(bool grade, int v) {
+
+void AK9750::setThresholdIr1Ir3(bool weight, int v) {
+
+  int k=v >>5; //high bits [11;5]
+  int b=v <<3; // low bits
+  b &= 0b11111000; // low bits
+  k &= 0b01111111; // high bits
+  byte currentSettings;
+
+  if (weight) {
+
+    writeRegister(AK9750_ETH13H_LOW, b);
+    writeRegister(AK9750_ETH13H_HIGH, k);
+
+    currentSettings=readRegister(AK9750_ETH13H_LOW);
+    //Serial.print("AK9750_ETH13H_LOW : ");
+    //Serial.println(currentSettings,BIN);
+
+    currentSettings=readRegister(AK9750_ETH13H_HIGH);
+    //Serial.print("AK9750_ETH13H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
+
+  } else {
+
+    writeRegister(AK9750_ETH13L_LOW, b);
+    writeRegister(AK9750_ETH13L_HIGH, k);
+
+    currentSettings=readRegister(AK9750_ETH13L_LOW);
+    //Serial.print("AK9750_ETH13L_LOW : ");
+    //Serial.println(currentSettings,BIN);
+
+    currentSettings=readRegister(AK9750_ETH13L_HIGH);
+    //Serial.print("AK9750_ETH13L_HIGH : ");
+    //Serial.println(currentSettings,BIN);
+  } 
+}
+
+void AK9750::setThresholdEepromIr1Ir3(bool weight, int v) {
 
   int h=v >>6; //high bits [11;6]
   v &= 0b00111111; // low bits
@@ -198,7 +281,7 @@ void AK9750::setThresholdIr1Ir3(bool grade, int v) {
 
   writeRegister(AK9750_ECNTL1, temp); // open EEPROM mode  
 
-  if (grade) {
+  if (weight) {
 
     writeRegister(AK9750_EKEY, EKEY_ON); // allow EEPROM writing
 
@@ -212,12 +295,12 @@ void AK9750::setThresholdIr1Ir3(bool grade, int v) {
     delay(15); //  EEPROM write time (tWR) should be longer than 10ms
 
     currentSettings=readRegister(AK9750_EETH13H_LOW);
-    Serial.print("AK9750_EETH13H_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13H_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13H_HIGH);
-    Serial.print("AK9750_EETH13H_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
   } else {
 
@@ -234,21 +317,55 @@ void AK9750::setThresholdIr1Ir3(bool grade, int v) {
     delay(15); //  EEPROM write time (tWR) should be longer than 10ms
 
     currentSettings=readRegister(AK9750_EETH13L_LOW);
-    Serial.print("AK9750_EETH13L_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13L_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13L_HIGH);
-    Serial.print("AK9750_EETH13L_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13L_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
   }
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
-
-
 }
 
 void AK9750::readThreshold() {
+  byte currentSettings;
+
+  currentSettings=readRegister(AK9750_ETH24H_LOW);
+  //Serial.print("AK9750_ETH24H_LOW : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH24H_HIGH);
+  //Serial.print("AK9750_ETH24H_HIGH : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH24L_LOW);
+  //Serial.print("AK9750_ETH24L_LOW : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH24L_HIGH);
+  //Serial.print("AK9750_ETH24L_HIGH : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH13H_LOW);
+  //Serial.print("AK9750_ETH13H_LOW : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH13H_HIGH);
+  //Serial.print("AK9750_ETH13H_HIGH : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH13L_LOW);
+  //Serial.print("AK9750_ETH13L_LOW : ");
+  //Serial.println(currentSettings,BIN);
+
+  currentSettings=readRegister(AK9750_ETH13L_HIGH);
+  //Serial.print("AK9750_ETH13L_HIGH : ");
+  //Serial.println(currentSettings,BIN);
+}
+
+void AK9750::readThresholdEeprom() {
   byte currentSettings;
   byte currentMode = readRegister(AK9750_ECNTL1);
   byte temp = EEPROM_MODE | (currentMode & 00111000);
@@ -256,41 +373,54 @@ void AK9750::readThreshold() {
   writeRegister(AK9750_ECNTL1, temp); // open EEPROM mode  
 
     currentSettings=readRegister(AK9750_EETH24H_LOW);
-    Serial.print("AK9750_EETH24H_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24H_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH24H_HIGH);
-    Serial.print("AK9750_EETH24H_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH24L_LOW);
-    Serial.print("AK9750_EETH24L_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24L_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH24L_HIGH);
-    Serial.print("AK9750_EETH24L_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH24L_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13H_LOW);
-    Serial.print("AK9750_EETH13H_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13H_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13H_HIGH);
-    Serial.print("AK9750_EETH13H_HIGH : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13H_HIGH : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13L_LOW);
-    Serial.print("AK9750_EETH13L_LOW : ");
-    Serial.println(currentSettings,BIN);
+    //Serial.print("AK9750_EETH13L_LOW : ");
+    //Serial.println(currentSettings,BIN);
 
     currentSettings=readRegister(AK9750_EETH13L_HIGH);
-    Serial.print("AK9750_EETH13L_HIGH : ");
-    Serial.println(currentSettings,BIN);    
+    //Serial.print("AK9750_EETH13L_HIGH : ");
+    //Serial.println(currentSettings,BIN);    
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
 }
 
 void AK9750::setHysteresisIr2Ir4(int v) {
+
+  v &= 0b00011111; // we keep the 5 last bits
+  v |= 0b11100000; // mask
+
+  byte currentSettings;
+
+  writeRegister(AK9750_EHYS24, v); // EHYS24 hysteresis level
+  currentSettings=readRegister(AK9750_EHYS24);
+  //Serial.print("AK9750_EHYS24 : ");
+  //Serial.println(currentSettings,BIN);
+}
+
+void AK9750::setHysteresisEepromIr2Ir4(int v) {
 
   v &= 0b00011111; // we keep the 5 last bits
   v |= 0b11100000; // mask
@@ -306,14 +436,27 @@ void AK9750::setHysteresisIr2Ir4(int v) {
   delay(15);
 
   currentSettings=readRegister(AK9750_EEHYS24);
-  Serial.print("AK9750_EEHYS24 : ");
-  Serial.println(currentSettings,BIN);
+  //Serial.print("AK9750_EEHYS24 : ");
+  //Serial.println(currentSettings,BIN);
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
 
 }
 
 void AK9750::setHysteresisIr1Ir3(int v) {
+
+  v &= 0b00011111; // we keep the 5 last bits
+  v |= 0b11100000; // mask
+
+  byte currentSettings;
+
+  writeRegister(AK9750_EHYS13, v); // EHYS13 hysteresis level
+  currentSettings=readRegister(AK9750_EHYS13);
+  //Serial.print("AK9750_EHYS13 : ");
+  //Serial.println(currentSettings,BIN);
+}
+
+void AK9750::setHysteresisEepromIr1Ir3(int v) {
 
   v &= 0b00011111; // we keep the 5 last bits
   v |= 0b11100000; // mask
@@ -329,14 +472,25 @@ void AK9750::setHysteresisIr1Ir3(int v) {
   delay(15); 
 
   currentSettings=readRegister(AK9750_EEHYS13);
-  Serial.print("AK9750_EEHYS13 : ");
-  Serial.println(currentSettings,BIN);
+  //Serial.print("AK9750_EEHYS13 : ");
+  //Serial.println(currentSettings,BIN);
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
-
 }
 
 void AK9750::readHysteresis() {
+
+  byte currentSettings;
+
+  currentSettings=readRegister(AK9750_EHYS24);
+  //Serial.print("AK9750_EHYS24 : ");
+  //Serial.println(currentSettings,BIN);
+  currentSettings=readRegister(AK9750_EHYS13);
+  //Serial.print("AK9750_EHYS13 : ");
+  //Serial.println(currentSettings,BIN);
+}
+
+void AK9750::readHysteresisEeprom() {
 
   byte currentSettings;
   byte currentMode = readRegister(AK9750_ECNTL1);
@@ -345,17 +499,15 @@ void AK9750::readHysteresis() {
   writeRegister(AK9750_ECNTL1, temp); // open EEPROM mode  
 
   currentSettings=readRegister(AK9750_EEHYS24);
-  Serial.print("AK9750_EEHYS24 : ");
-  Serial.println(currentSettings,BIN);
+  //Serial.print("AK9750_EEHYS24 : ");
+  //Serial.println(currentSettings,BIN);
   currentSettings=readRegister(AK9750_EEHYS13);
-  Serial.print("AK9750_EEHYS13 : ");
-  Serial.println(currentSettings,BIN);
+  //Serial.print("AK9750_EEHYS13 : ");
+  //Serial.println(currentSettings,BIN);
 
 
   writeRegister(AK9750_ECNTL1, currentMode); // close EEPROM mode  
-
 }
-
 
 void AK9750::setInterrupts(bool ir13h,bool ir13l,bool ir24h,bool ir24l,bool dr) {
   // mask , assembly of AK9750_EINTEN bits
@@ -363,21 +515,20 @@ void AK9750::setInterrupts(bool ir13h,bool ir13l,bool ir24h,bool ir24l,bool dr) 
   writeRegister(AK9750_EINTEN, v); 
 
   byte currentSettings=readRegister(AK9750_EINTEN);
-  Serial.print("AK9750_EINTEN : ");
-  Serial.println(currentSettings,BIN);  
+  //Serial.print("AK9750_EINTEN : ");
+  //Serial.println(currentSettings,BIN);  
 }
 
 int AK9750::readInterruptStatus() {
   byte currentSettings=readRegister(AK9750_INTST);
-  Serial.print("AK9750_INTST : ");
-  Serial.println(currentSettings,BIN);
+  //Serial.print("AK9750_INTST : ");
+  //Serial.println(currentSettings,BIN);
   if bitRead(currentSettings,0) return 5;
   if bitRead(currentSettings,1) return 1;
   if bitRead(currentSettings,2) return 2;
   if bitRead(currentSettings,3) return 3;
   if bitRead(currentSettings,4) return 4;
   return 0;
-
 }
 
 //Checks to see if DRDY flag is set in the status register
