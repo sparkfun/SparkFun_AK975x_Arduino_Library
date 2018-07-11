@@ -29,6 +29,20 @@ getTemperatureF 	KEYWORD2
 
 softReset		KEYWORD2
 
+setThresholdIr2Ir4	KEYWORD2
+setHysteresisIr2Ir4	KEYWORD2
+setThresholdIr1Ir3	KEYWORD2
+setHysteresisIr1Ir3	KEYWORD2
+readHysteresis		KEYWORD2
+readThreshold		KEYWORD2
+
+setThresholdEepromIr2Ir4	KEYWORD2
+setHysteresisEepromIr2Ir4	KEYWORD2
+setThresholdEepromIr1Ir3	KEYWORD2
+setHysteresisEepromIr1Ir3	KEYWORD2
+readHysteresisEeprom		KEYWORD2
+readThresholdEeprom			KEYWORD2
+
 enableDebugging KEYWORD2
 disableDebugging KEYWORD2
 
