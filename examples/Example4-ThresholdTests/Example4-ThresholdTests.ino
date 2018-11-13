@@ -1,8 +1,8 @@
 #include <Wire.h>
 
-#include "SparkFun_AK9750_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK9750_Arduino_Library
+#include "SparkFun_AK975X_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975X_Arduino_Library
 
-AK9750 movementSensor; //Hook object to the library
+AK975X movementSensor; //Hook object to the library
 
 int ir1, ir2, ir3, ir4, temperature;
 int s;
@@ -14,7 +14,7 @@ unsigned long last;
 void setup()
 {
   Serial.begin(115200);
-  Serial.println("AK9750 Set Threshold in EEPROM & Read Example");
+  Serial.println("AK975X Set Threshold in EEPROM & Read Example");
   pinMode(A3, INPUT);
   
   Wire.begin();
@@ -26,7 +26,7 @@ void setup()
     while (1);
   }
 
-  Serial.println("AK9750 Human Presence Sensor online");
+  Serial.println("AK975X Human Presence Sensor online");
   Serial.println();
   Serial.println("Type : bytenumber ,value ");
   Serial.println("ETH24H : 1 , [-2048,2048]");

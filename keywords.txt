@@ -6,7 +6,7 @@
 # Datatypes (KEYWORD1)
 #######################################
 
-AK9750	KEYWORD1
+AK975X	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)

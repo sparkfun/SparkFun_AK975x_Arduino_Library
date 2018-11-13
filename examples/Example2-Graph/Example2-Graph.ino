@@ -1,5 +1,5 @@
 /*
-  AK9752 Human Presence and Movement Sensor Example Code
+  AK975X Human Presence and Movement Sensor Example Code
   By: Nathan Seidle
   SparkFun Electronics
   Date: March 10th, 2017
