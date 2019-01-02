@@ -89,7 +89,7 @@ void AK975X::refresh()
 //Returns the temperature in C
 float AK975X::getTemperature()
 {
-  int value = readRegister16(AK975X_TMP);
+  int16_t value = readRegister16(AK975X_TMP);
 
   value >>= 6; //Temp is 10-bit. TMPL0:5 fixed at 0
 
