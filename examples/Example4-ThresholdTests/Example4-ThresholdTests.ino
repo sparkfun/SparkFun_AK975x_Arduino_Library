@@ -1,6 +1,6 @@
 #include <Wire.h>
 
-#include "SparkFun_AK975x_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975x_Arduino_Library
+#include "SparkFun_AK975X_Arduino_Library.h" //Use Library Manager or download here: https://github.com/sparkfun/SparkFun_AK975X_Arduino_Library
 
 AK975X movementSensor; //Hook object to the library
 
@@ -9,13 +9,13 @@ int s;
 int v;
 String sensor;
 String value;
-bool reading=false;
+bool reading = false;
 unsigned long last;
 void setup()
 {
   Serial.begin(115200);
   Serial.println("AK975X Set Threshold in EEPROM & Read Example");
-  pinMode(A3, INPUT); //not necessary ?
+  pinMode(A3, INPUT);
   
   Wire.begin();
 
@@ -34,10 +34,8 @@ void setup()
   Serial.println("EHY24 : 3 , [0,31]");
   Serial.println("EINTEN : 4 , [0,31]");
   Serial.println("Read INTST : 5");
-  Serial.println("Restart i2c : 6");
-  Serial.println("Begin readings : 7");
-  Serial.println("Stop readings : 8");
-  Serial.println("read Threshold and Hysteresis : 9");
+  Serial.println("Begin readings : 6");
+  Serial.println("Stop readings : 7");
 
   Serial.println();
   
@@ -72,25 +70,17 @@ void loop()
       break;
 
       case 5:
-      movementSensor.readInterruptStatus();
+      Serial.print("Interrupt Status: ");
+      Serial.println(movementSensor.readInterruptStatus());
       break;
 
       case 6:
-      // restartI2c();
-      break;
-
-      case 7:
       reading= true;
       break;
       
-      case 8:
+      case 7:
       reading= false;
-      break;
-
-      case 9:
-      movementSensor.readHysteresis();
-      movementSensor.readThreshold();
-      break;      
+      break;    
 
       default:
       break;
@@ -104,8 +94,6 @@ void loop()
 
 void readSensors()
 {
-
-
     int interrupt = analogRead(A3);
     if (interrupt<600) {
 
