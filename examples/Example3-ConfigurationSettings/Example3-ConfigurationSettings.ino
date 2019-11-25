@@ -49,7 +49,7 @@ void setup()
   //Here we can pass it different Wire streams such as Wire1 or Wire2 used on Teensys
   //We can select FAST or STANDARD I2C speed
   //If you set the address jumpers, this is where you pass the address of the sensor you want to talk to
-  if (movementSensor.begin(Wire, I2C_SPEED_FAST, 0x64, baud) == false)
+  if (movementSensor.begin(Wire, I2C_SPEED_FAST, 0x64) == false)
   {
     Serial.println("Device not found. Check wiring.");
     while (1);
